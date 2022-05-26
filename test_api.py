@@ -36,7 +36,6 @@ def test_happy_path_returns_201_and_allocated_batch(add_stock):
     )
     data = {"orderid": random_orderid(), "sku": sku, "qty": 3}
     url = config.get_api_url()
-
     r = requests.post(f"{url}/allocate", json=data)
 
     assert r.status_code == 201
@@ -49,5 +48,6 @@ def test_unhappy_path_returns_400_and_error_message():
     data = {"orderid": orderid, "sku": unknown_sku, "qty": 20}
     url = config.get_api_url()
     r = requests.post(f"{url}/allocate", json=data)
+
     assert r.status_code == 400
     assert r.json()["message"] == f"Invalid sku {unknown_sku}"

@@ -13,9 +13,13 @@ orm.start_mappers()
 get_session = sessionmaker(bind=create_engine(config.get_postgres_uri()))
 app = Flask(__name__)
 
+#@app.route("/")
+#def index():
+#    return "<h1>Hello!</h1>", 200
 
 @app.route("/allocate", methods=["POST"])
 def allocate_endpoint():
+    print("In allocate_endpoint()\n")
     session = get_session()
     repo = repository.SqlAlchemyRepository(session)
     line = model.OrderLine(
