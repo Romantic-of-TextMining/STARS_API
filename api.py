@@ -21,7 +21,10 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def get_route():
-    return {},200
+    result = {
+        "description": "Welcome to STARS_API"
+    }
+    return result,200
 
 
 @app.route("/v1/textcloud/<string:field>", methods=["GET"])

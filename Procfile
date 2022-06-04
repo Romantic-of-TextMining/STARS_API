@@ -1,1 +1,1 @@
-web: gunicorn api:app -t 5:5 -p ${PORT:-3000}
+web: gunicorn api:app
