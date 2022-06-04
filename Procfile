@@ -1,0 +1,1 @@
+web: gunicorn stars:app -t 5:5 -p ${PORT:-3000}
