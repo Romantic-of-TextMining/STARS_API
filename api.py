@@ -19,8 +19,13 @@ app = Flask(__name__)
 #def index():
 #    return "<h1>Hello!</h1>", 200
 
+@app.route("/", methods=["GET"])
+def get_route():
+    return {},200
+
+
 @app.route("/v1/textcloud/<string:field>", methods=["GET"])
-def text_cloud(field):
+def get_text_cloud(field):
     #args = tf_idf_request.TfIdfRequestHandler(field)
     result = tf_idf.TfIdfCalculator.get_tf_idf(field)
     return result
