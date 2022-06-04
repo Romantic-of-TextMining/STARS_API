@@ -3,6 +3,6 @@
 __pycache__
 *.egg-info
 test_script
-test_file
+#test_file
 domain/decision_tree.py
 require_app.py
