@@ -20,7 +20,7 @@ class TfIdfCalculator:
   @classmethod
   def get_tf_idf(self, msg):
     #self.field = msg.args["field"]
-    print(f"msg: {msg}")
+    #print(f"msg: {msg}")
     self.df = self.__import_dataset()
     result = self.__calculate_tf_idf(self, self.df)
     return result
