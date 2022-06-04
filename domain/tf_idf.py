@@ -8,7 +8,16 @@ from collections import defaultdict
 import config
 
 import nltk
-nltk.download('stopwords')
+
+#check if data have downloaded. Otherwist, FileExistsError will get raised and crushed
+def download_ntlk():
+    try:
+        nltk.data.find('corpora/stopwords')
+    except LookupError:
+        nltk.download('stopwords')
+
+
+download_ntlk()
 from nltk.corpus import stopwords
 stopwords = set(stopwords.words('english'))
 
