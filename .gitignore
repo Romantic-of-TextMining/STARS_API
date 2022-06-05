@@ -6,3 +6,4 @@ test_script
 #test_file
 domain/decision_tree.py
 require_app.py
+domain/20220603TEST_for_Cosine_Similarity.ipynb
