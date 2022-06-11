@@ -9,6 +9,7 @@ from adapters import repository
 from service_layer import services
 from service_layer.request import tf_idf_request
 from domain import tf_idf
+from domain import cos_sim
 
 
 orm.start_mappers()
@@ -26,15 +27,30 @@ def get_route():
     }
     return result,200
 
+@app.route("/v1/rank/<string:field>", methods=["GET"])
+def get_rank(field):
+    #args = tf_idf_request.TfIdfRequestHandler(field)
+    msg = {}
+    msg["field"] = field
+    result = tf_idf.TfIdfCalculator.get_tf_idf(msg)
+    return result
+
 
 @app.route("/v1/textcloud/<string:field>", methods=["GET"])
 def get_text_cloud(field):
     #args = tf_idf_request.TfIdfRequestHandler(field)
-    result = tf_idf.TfIdfCalculator.get_tf_idf(field)
+    msg = {}
+    msg["field"] = field
+    result = tf_idf.TfIdfCalculator.get_tf_idf(msg)
     return result
-#get para
-#call tf-idf based on para
 
+@app.route("/v1/cos_sim", methods=["GET"])
+def get_cos_sim():
+    msg = {}
+    msg["field"] = request.args.get("field")
+    msg["query"] = request.args.get("query")
+    result = cos_sim.CosSimCalCulator.get_cos_sim_by_query(msg)
+    return result
 
 #@app.route("/v1/high_score", methods=["POST"])
 #def high_score_endpoint():
@@ -43,18 +59,11 @@ def get_text_cloud(field):
 
 #    return {"ranking": ranking}, 201
 
-@app.route("/allocate", methods=["POST"])
-def allocate_endpoint():
-    print("In allocate_endpoint()\n")
-    session = get_session()
-    repo = repository.SqlAlchemyRepository(session)
-    line = model.OrderLine(
-        request.json["orderid"], request.json["sku"], request.json["qty"],
-    )
 
-    try:
-        batchref = services.allocate(line, repo, session)
-    except (model.OutOfStock, services.InvalidSku) as e:
-        return {"message": str(e)}, 400
 
-    return {"batchref": batchref}, 201
+'''
+from domain import tf_idf
+msg = {}
+msg["field"] = "en-14_participation_in_public_policy"
+result = tf_idf.TfIdfCalculator.get_tf_idf(msg)
+'''

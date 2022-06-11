@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
-
-import pandas as pd
+#in-build
 import os
 
+#3rd
+import pandas as pd
 from nltk import PorterStemmer
 from collections import defaultdict
 import config
-
 import nltk
+
+#local
+from adapters import gateway
 
 #check if data have downloaded. Otherwist, FileExistsError will get raised and crushed
 def download_ntlk():
@@ -28,13 +31,17 @@ class TfIdfCalculator:
 
   @classmethod
   def get_tf_idf(self, msg):
-    #self.field = msg.args["field"]
+    self.field = msg["field"]
     #print(f"msg: {msg}")
-    self.df = self.__import_dataset()
+    self.df = gateway.FieldSheet(self.field).get_field_sheet()
     result = self.__calculate_tf_idf(self, self.df)
     return result
 
-    
+  @classmethod
+  def pre_process2token(self, descriptions):
+    token = self.__remove_stopwords(self.__stemming([self.__clean_word(j) for j in self.__tokenize(descriptions)]))
+    return token
+
   def __import_dataset():
     file_root = os.path.join(config.basedir, "test_file") 
     # Read the two excel respectively
@@ -55,8 +62,8 @@ class TfIdfCalculator:
     return df
 
   def __tokenize(description) -> list:
-      tokens = description.split()
-      return tokens
+    tokens = description.split()
+    return tokens
 
   def __stemming(itokens) -> list:
       ps = PorterStemmer()
