@@ -10,37 +10,49 @@ DEFAULT_PATH = os.path.join(config.basedir, "dataset")
 
 class FieldSheet:
 
-    def __init__(self, param):
-        self.root_path = self.__create_path_by_param(param) 
+    def __init__(self, field):
+        self.root_path = self.__create_path_by_param(field)
 
     def get_field_sheet(self):
         self.field_sheet = self.__combine_all_files_by_path()
         return self.field_sheet
 
-    def get_items_from_field(self):
+    def get_items_from_field(self, item = ""):
         self.dict_for_items = {
             'Rated Level': {}
         }
         for (root,dirs,files) in os.walk(self.root_path, topdown=True):
-            list = self.__root2list(root)
-            files.remove('.DS_Store')
+            dir_list = self.__root2list(root)
+
+            if dir_list == []:
+                continue
+            else:
+                level = dir_list[0]
+                files.remove('.DS_Store')
+    
             for idx, file in enumerate(files):
-                level = list[0]
                 if idx == 0:
                     self.dict_for_items['Rated Level'][level] = {}
+
                 filename = file.replace(".xlsx", "")
-                self.dict_for_items['Rated Level'][level][filename] = {}
+                if (item != "" and item!=filename):
+                    continue
+                else:
+                    self.__push_item_to_dict(root, level, file, filename)
 
-                sheet_path = os.path.join(root, file)
-                sheet = pandas.read_excel(sheet_path, header=2).iloc[3:,:7]
-
-                sheet.columns.values[6] = "Description"
-                sheet = sheet.dropna(subset=['Description'])
-
-                description = sheet.loc[:,"Description"].tolist()
-                self.dict_for_items['Rated Level'][level][filename]['Description'] = description
         return self.dict_for_items
 
+    def __push_item_to_dict(self, root, level, file, filename):
+            self.dict_for_items['Rated Level'][level][filename] = {}
+
+            sheet_path = os.path.join(root, file)
+            sheet = pandas.read_excel(sheet_path, header=2).iloc[3:,:7]
+
+            sheet.columns.values[6] = "Description"
+            sheet = sheet.dropna(subset=['Description'])
+
+            description = sheet.loc[:,"Description"].tolist()
+            self.dict_for_items['Rated Level'][level][filename]['Description'] = description
 
     def __create_path_by_param(self, param, path = DEFAULT_PATH):
         result_path = os.path.join(path, param)
@@ -57,6 +69,7 @@ class FieldSheet:
             for file in files:
                 sheet_path = os.path.join(root, file)
                 sheet = pandas.read_excel(sheet_path, header=2).iloc[3:,:7]
+                sheet = sheet.drop_duplicates()
                 sheet.columns.values[6] = "Description"
                 sheet = self.__add_category_col2sheet(sheet, list)
                 sheet['Item'] = file.replace(".xlsx", "")
@@ -88,8 +101,12 @@ import config
 import pandas
 DEFAULT_PATH = os.path.join(config.basedir, "dataset")
 from adapters import gateway
-test = gateway.FieldSheet("en-14_participation_in_public_policy")
-test.get_items_from_field()
+test = gateway.FieldSheet("en_14_participation_in_public_policy")
+result = test.get_items_from_field()
+result['Rated Level']['gold']['national level'].keys()
+
+item = test.get_items_from_field("national level")
+item['Rated Level']['gold'].keys()
 
 test.get_field_sheet()
 '''

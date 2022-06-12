@@ -58,7 +58,7 @@ class CosSimCalCulator:
         self.query_token = tf_idf.TfIdfCalculator.pre_process2token(self.query)
         
         query_token = set(self.query_token).intersection(self.bag_words)
-        tfidf_query =CosSimLib.compute_tfidf_query(list(query_token), self.bag_words_idf)
+        tfidf_query = CosSimLib.compute_tfidf_query(list(query_token), self.bag_words_idf)
         #calculate tfidf for query text
 
         # add tfidf of query text to tfidf of all doc and convert to dataframe

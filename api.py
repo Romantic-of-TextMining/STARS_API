@@ -8,9 +8,7 @@ from adapters import orm
 from adapters import repository
 from service_layer import services
 from service_layer.request import tf_idf_request
-from domain import tf_idf
-from domain import cos_sim
-
+from domain import tf_idf, cos_sim, rank
 
 orm.start_mappers()
 get_session = sessionmaker(bind=create_engine(config.get_postgres_uri()))
@@ -27,12 +25,11 @@ def get_route():
     }
     return result,200
 
-@app.route("/v1/rank/<string:field>", methods=["GET"])
-def get_rank(field):
-    #args = tf_idf_request.TfIdfRequestHandler(field)
+@app.route("/v1/rank", methods=["GET"])
+def get_rank():
     msg = {}
-    msg["field"] = field
-    result = tf_idf.TfIdfCalculator.get_tf_idf(msg)
+    msg["field"] = request.args.get("field")
+    result = rank.RankCalCulator.get_rank_by_field(msg)
     return result
 
 
@@ -64,6 +61,6 @@ def get_cos_sim():
 '''
 from domain import tf_idf
 msg = {}
-msg["field"] = "en-14_participation_in_public_policy"
+msg["field"] = "en_14_participation_in_public_policy"
 result = tf_idf.TfIdfCalculator.get_tf_idf(msg)
 '''
