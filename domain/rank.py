@@ -30,7 +30,7 @@ class RankCalCulator:
         item_index = self.field_sheet["Item"] == item
         item_field = self.field_sheet.loc[item_index,:]
         item_field = item_field.sort_values(by=["Points Earned", "STARS Version"], ascending = [False, False])
-        return item_field.to_dict()
+        return item_field.to_dict('index')
 
 """
 from domain import rank

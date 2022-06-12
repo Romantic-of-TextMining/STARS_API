@@ -33,11 +33,11 @@ def get_rank():
     return result
 
 
-@app.route("/v1/textcloud/<string:field>", methods=["GET"])
-def get_text_cloud(field):
+@app.route("/v1/textcloud", methods=["GET"])
+def get_text_cloud():
     #args = tf_idf_request.TfIdfRequestHandler(field)
     msg = {}
-    msg["field"] = field
+    msg["field"] = request.args.get("field")
     result = tf_idf.TfIdfCalculator.get_tf_idf(msg)
     return result
 

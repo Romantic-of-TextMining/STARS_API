@@ -75,19 +75,29 @@ class TfIdfCalculator:
       return tokens
 
   def __clean_word(word):
-    word = word.replace('\"','').replace('\r','').replace('\n','').replace('\t','')
-    word = re.sub("[\s+\.\!\/_,$%^*(+\"\']+|[+——！，。？、~@#￥%……&*（）]", "", word)
+    word = word.replace('\"','').replace('\r','').replace('\n','').replace('\t','').replace('x000d', '')
+    word = re.sub("[\s+\.\!\/_,$%^*(+\"\']+|[+——！，。？、~@#￥%……&*（）?]", "", word)
     return word
 
   def __group_by_levels(df) -> dict: # O(n*k) n:length_of_df ; k:length_of_levels
       levels = list(df['Rated Level'].unique())
       dictionary_of_each_level = defaultdict(list)
       for i in range(len(levels)):
+          result = []
           tmp_df_rl = df['Rated Level'].loc[lambda x: x==levels[i]]
           idx_tmp = list(tmp_df_rl.index)
           tmp_df = df['tokens'].loc[idx_tmp]
           for item in tmp_df:
-              dictionary_of_each_level[levels[i]] += item
+              result += item
+          replace_token = {
+            "x000d",
+            "unh",
+            "•",
+            "?"
+          }
+          result = [item for item in result if item not in replace_token]
+          dictionary_of_each_level[levels[i]] = result
+
       return dictionary_of_each_level
 
   def __calculate_tf_idf(self, df):
@@ -149,7 +159,6 @@ class TfIdfCalculator:
       bag_words += doc_all[doc]
     bag_words=set(bag_words)
     #print(bag_words)
-
     #calculate idf for every word in bag_words
     bag_words_idf={} # declare "bag_words_idf" data structure is dictionary 
     for word in bag_words:
@@ -169,7 +178,7 @@ class TfIdfCalculator:
 
     tf_idf_token_dict = {}
     for index, row in tf_dataframe.iterrows():
-      tf_idf_token_dict[index] = list(row.sort_values(ascending=False)[:49].to_dict().keys())
+      tf_idf_token_dict[index] = row.sort_values(ascending=False)[:49].to_dict()
 
     # for each category, get first 50 token
     # give json
