@@ -68,7 +68,6 @@ class FieldSheet:
             list = self.__root2list(root)
             print(f"root: {root}")
             print(f"dirs: {dirs}")
-            print(f"list: {list}")
             print(f"files: {files}")
             for file in files:
                 if file == '.DS_Store': continue
