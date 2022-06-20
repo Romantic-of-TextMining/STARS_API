@@ -61,14 +61,9 @@ class FieldSheet:
         return result_path
 
     def __combine_all_files_by_path(self):
-        print(f"self.root_path: {self.root_path}")
         self.field_sheet = pandas.DataFrame()
-        print(f"os.listdir(DEFAULT_PATH):{os.listdir(DEFAULT_PATH)}")
         for (root,dirs,files) in os.walk(self.root_path, topdown=True):
             list = self.__root2list(root)
-            print(f"root: {root}")
-            print(f"dirs: {dirs}")
-            print(f"files: {files}")
             for file in files:
                 if file == '.DS_Store': continue
 
@@ -80,7 +75,6 @@ class FieldSheet:
                 sheet['Item'] = file.replace(".xlsx", "")
                 self.field_sheet = pandas.concat([self.field_sheet, sheet], axis=0, ignore_index=True)
                 
-        print(f"self.field_sheet.columns: {self.field_sheet.columns}")
         self.field_sheet = self.field_sheet.dropna(subset=['Description'])
 
         return self.field_sheet
