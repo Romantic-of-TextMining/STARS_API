@@ -98,19 +98,3 @@ class FieldSheet:
 class FieldSheetRetriever:
     #retrieve single sheet by parameter
     pass
-
-'''
-import os
-import config
-import pandas
-DEFAULT_PATH = os.path.join(config.basedir, "dataset")
-from adapters import gateway
-test = gateway.FieldSheet("en_14_participation_in_public_policy")
-result = test.get_items_from_field()
-result['Rated Level']['gold']['national level'].keys()
-
-item = test.get_items_from_field("national level")
-item['Rated Level']['gold'].keys()
-
-test.get_field_sheet()
-'''
