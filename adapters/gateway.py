@@ -61,7 +61,7 @@ class FieldSheet:
         return result_path
 
     def __combine_all_files_by_path(self):
-
+        print(f"self.root_path: {self.root_path}")
         self.field_sheet = pandas.DataFrame()
 
         for (root,dirs,files) in os.walk(self.root_path, topdown=True):
