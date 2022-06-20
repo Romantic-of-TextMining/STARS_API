@@ -66,8 +66,10 @@ class FieldSheet:
 
         for (root,dirs,files) in os.walk(self.root_path, topdown=True):
             list = self.__root2list(root)
+            
             for file in files:
                 if file == '.DS_Store': continue
+
                 sheet_path = os.path.join(root, file)
                 sheet = pandas.read_excel(sheet_path, header=2).iloc[3:,:7]
                 sheet = sheet.drop_duplicates()
@@ -75,6 +77,7 @@ class FieldSheet:
                 sheet = self.__add_category_col2sheet(sheet, list)
                 sheet['Item'] = file.replace(".xlsx", "")
                 self.field_sheet = pandas.concat([self.field_sheet, sheet], axis=0, ignore_index=True)
+                print(f"self.field_sheet.columns: {self.field_sheet.columns}")
 
         self.field_sheet = self.field_sheet.dropna(subset=['Description'])
 
