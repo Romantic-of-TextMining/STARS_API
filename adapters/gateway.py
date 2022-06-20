@@ -77,8 +77,8 @@ class FieldSheet:
                 sheet = self.__add_category_col2sheet(sheet, list)
                 sheet['Item'] = file.replace(".xlsx", "")
                 self.field_sheet = pandas.concat([self.field_sheet, sheet], axis=0, ignore_index=True)
-                print(f"self.field_sheet.columns: {self.field_sheet.columns}")
-
+                
+        print(f"self.field_sheet.columns: {self.field_sheet.columns}")
         self.field_sheet = self.field_sheet.dropna(subset=['Description'])
 
         return self.field_sheet
