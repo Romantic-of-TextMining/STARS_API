@@ -28,11 +28,12 @@ class FieldSheet:
                 continue
             else:
                 level = dir_list[0]
-                files.remove('.DS_Store')
     
             for idx, file in enumerate(files):
                 if idx == 0:
                     self.dict_for_items['Rated Level'][level] = {}
+
+                if file == '.DS_Store': continue
 
                 filename = file.replace(".xlsx", "")
                 if (item != "" and item!=filename):
@@ -65,8 +66,8 @@ class FieldSheet:
 
         for (root,dirs,files) in os.walk(self.root_path, topdown=True):
             list = self.__root2list(root)
-            files.remove('.DS_Store')
             for file in files:
+                if file == '.DS_Store': continue
                 sheet_path = os.path.join(root, file)
                 sheet = pandas.read_excel(sheet_path, header=2).iloc[3:,:7]
                 sheet = sheet.drop_duplicates()
