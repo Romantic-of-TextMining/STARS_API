@@ -66,7 +66,10 @@ class FieldSheet:
 
         for (root,dirs,files) in os.walk(self.root_path, topdown=True):
             list = self.__root2list(root)
-            
+            print(f"root: {root}")
+            print(f"dirs: {dirs}")
+            print(f"list: {list}")
+            print(f"files: {files}")
             for file in files:
                 if file == '.DS_Store': continue
 
