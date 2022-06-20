@@ -2,3 +2,9 @@
 .mypy_cache
 __pycache__
 *.egg-info
+test_script
+#test_file
+domain/decision_tree.py
+require_app.py
+domain/20220603TEST_for_Cosine_Similarity.ipynb
+domain/cos_sim_template.py
